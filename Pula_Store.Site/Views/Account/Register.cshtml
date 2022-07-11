@@ -1,0 +1,67 @@
+﻿@model Site.Models.ViewModel.RegisterViewModel
+@{
+    ViewData["Title"] = "ثبت نام کاربر جدید";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="basic-elements">
+    @*<div class="row">
+            <div class="col-sm-12">
+                <h2 class="content-header ">فرم ثبت نام کاربر جدید</h2>
+            </div>
+        </div>*@
+    <div class="row">
+        <div class="col-md-12 ">
+            <div class="bar-success">
+                <h4 class="card-title mb-0">اطلاعات کاربر جدید را وارد نمایید</h4>
+            </div>
+            <div class="px-3">
+                <form asp-action="Register" asp-controller="Account" @*asp-area="" *@ method="post" class="form">
+                    <div class="form-body ">
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                <label class="form-label" asp-for=" UserName"></label>
+                                <input asp-for=" UserName" class="form-control">
+                                <span asp-validation-for="UserName"></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                <label class="form-label" asp-for="Email"></label>
+                                <small class="text-muted"><i>info@bugeto.net</i></small>
+                                <input asp-for="Email" class="form-control">
+                                <span asp-validation-for="Email"></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                <label class="form-label" asp-for="Password"></label>
+                                <input asp-for="Password" type="password" class="form-control">
+                                <p><small class="text-muted">بیشتر از 6 کاراکتر و ترکیبی از حروف کوچک و بزرگ و عدد باشد</small></p>
+                                <span asp-validation-for="Password"></span>
+                            </div>
+                            @* <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                    <fieldset class="form-group">
+                                        <label for="basicSelect">نقش</label>
+                                        <select class="form-control" id="Role" name="Role" asp-items="@ViewBag.Roles"></select>
+                                        <p><small class="text-muted">سطح دسترسی کاربر مورد نظر را تعیین کنید</small></p>
+
+                                    </fieldset>
+                                </div>*@
+                            <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                <label class="form-label" asp-for="ConfirmPassword"></label>
+                                <input asp-for="ConfirmPassword" type="password" class="form-control" @*id="disabledInput" *@>
+                                <span asp-validation-for="ConfirmPassword"></span>
+                            </div>
+                            <div class="col-xl-12 col-lg-12 col-md-12 mb-1">
+                                <fieldset class="form-group">
+                                    <br />
+                                    <button type="submit" class="btn btn-success col-md-12">ثبت نام </button>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+

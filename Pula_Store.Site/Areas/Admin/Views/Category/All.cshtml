@@ -1,0 +1,489 @@
+﻿@model Site.Models.ViewModels.CategoryViewModel
+@{
+    ViewData["Title"] = "All";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container px-4">
+    <div class="row gx-5">
+        <div class="col">
+            <div class="p-3 border bg-light">
+                <select asp-items="Model.ParentCategories" id="category">
+                    @*<option selected>---- انتخاب کنید----</option>*@
+                </select>
+                <button type="button" class="btn btn-primary" onclick="beginop(this)" id="add-new-category">+</button>
+                <button type="button" class="btn btn-info" onclick="beginop(this)" id="edit-category"><span class="icon-note"></span></button>
+                <button type="button" class="btn btn-warning" onclick="beginop(this)" id="delete-category"><span class="icon-fire"></span></button>
+
+            </div>
+        </div>
+        <div class="col">
+            <div class="p-3 border bg-light">
+                <select asp-items="Model.SubCategories" id="subcategory">
+                    @*<option selected>---- انتخاب کنید----</option>*@
+                </select>
+                <button type="button" class="btn btn-primary" onclick="beginop(this)" id="add-new-subcategory">+</button>
+                <button type="button" class="btn btn-info" onclick="beginop(this)" id="edit-subcategory"><span class="icon-note"></span></button>
+                <button type="button" class="btn btn-warning" onclick="beginop(this)" id="delete-subcategory"><span class="icon-fire"></span></button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+    {
+
+    <link href="~/Sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <script src="~/Sweetalert2/sweetalert2.min.js"></script>
+
+    <script>
+
+
+//--------------------------------------------------
+
+       function AddNewCategory()
+        {
+          $('#categoryModal').modal('hide');
+          var postData = {
+                            'Name':$('#modal-category-name').val(),
+                            'parentId':''
+                          };
+
+        $.ajax(
+        {
+            contentType: 'application/x-www-form-urlencoded',
+            dataType: 'json',
+            type: "POST",
+            url: "AddCategory",
+            data: postData,
+            success: function (data)
+            {
+                if (data.isSuccess == true)
+                {
+                    swal.fire(
+                    'موفق!',
+                    data.message,
+                    'success'
+                    ).then(function (isConfirm)
+                    {
+                        location.reload();
+                    });//then
+                }//if
+                else
+                {
+                    swal.fire(
+                        'هشدار!',
+                        data.message,
+                        'warning'
+                    );
+                }//else
+            },//success
+            error: function (request, status, error)
+            {
+                alert(request.responseText);
+            }//error
+        });//ajax
+        }//function
+
+        //---------------------------------------------------
+        function EditCategory()
+        {
+          $('#categoryModal').modal('hide');
+
+          var postData = {
+                            'Id':$('#category :selected').val(),
+                            'Name':$('#modal-category-name').val(),
+                            'parentId':''
+                          };
+
+        $.ajax(
+        {
+            contentType: 'application/x-www-form-urlencoded',
+            dataType: 'json',
+            type: "POST",
+            url: "EditCategory",
+            data: postData,
+            success: function (data)
+            {
+                if (data.isSuccess==true)
+                {
+                    swal.fire(
+                    'موفق!',
+                    data.message,
+                    'success'
+                    ).then(function (isConfirm)
+                    {
+                        location.reload();
+                    });//then
+                }//if
+                else
+                {
+                    swal.fire(
+                        'هشدار!',
+                        data.message,
+                        'warning'
+                    );
+                }//else
+            },//success
+            error: function (request, status, error)
+            {
+                alert(request.responseText);
+            }//error
+        });//ajax
+        }//function
+
+        //---------------------------------------------------
+
+        function AddNewSubCategory()
+        {
+          $('#categoryModal').modal('hide');
+          var postData = {
+                            'parentId':$('#category :selected').val(),
+                            'Name':$('#modal-category-name').val(),
+                            'Id':''
+                          };
+
+        $.ajax(
+        {
+            contentType: 'application/x-www-form-urlencoded',
+            dataType: 'json',
+            type: "POST",
+            url: "AddSubCategory",
+            data: postData,
+            success: function (data)
+            {
+                if (data.isSuccess == true)
+                {
+                    swal.fire(
+                    'موفق!',
+                    data.message,
+                    'success'
+                    ).then(function (isConfirm)
+                    {
+                        location.reload();
+                    });//then
+                }//if
+                else
+                {
+                    swal.fire(
+                        'هشدار!',
+                        data.message,
+                        'warning'
+                    );
+                }//else
+            },//success
+            error: function (request, status, error)
+            {
+                alert(request.responseText);
+            }//error
+        });//ajax
+        }//function
+
+        //---------------------------------------------------
+
+        function EditSubCategory()
+        {
+          $('#categoryModal').modal('hide');
+
+          var postData = {
+                            'Id':$('#modal-category-id').val(),
+                            'Name':$('#modal-category-name').val(),
+                            'parentId':$('#category :selected').val(),
+                          };
+
+            $.ajax(
+            {
+                contentType: 'application/x-www-form-urlencoded',
+                dataType: 'json',
+                type: "POST",
+                url: "EditCategory",
+                data: postData,
+                success: function (data)
+                {
+                    if (data.isSuccess==true)
+                    {
+                        swal.fire(
+                        'موفق!',
+                        data.message,
+                        'success'
+                        ).then(function (isConfirm)
+                        {
+                            location.reload();
+                        });//then
+                    }//if
+                    else
+                    {
+                        swal.fire(
+                            'هشدار!',
+                            data.message,
+                            'warning'
+                        );
+                    }//else
+                },//success
+                error: function (request, status, error)
+                {
+                    alert(request.responseText);
+                }//error
+            });//ajax
+        }//function
+
+        //---------------------------------------------------
+        function deletecategory()
+        {
+            var postData = {
+                            'Id':$('#category :selected').val(),
+                            //'Name':$('#category-name').val(),
+                            'parentId':'',
+                          };
+
+            $.ajax(
+            {
+                contentType: 'application/x-www-form-urlencoded',
+                dataType: 'json',
+                type: "POST",
+                url: "RemoveCategory",
+                data: postData,
+                success: function (data)
+                {
+                    if (data.isSuccess==true)
+                    {
+                        swal.fire(
+                        'موفق!',
+                        data.message,
+                        'success'
+                        ).then(function (isConfirm)
+                        {
+                            location.reload();
+                        });//then
+                    }//if
+                    else
+                    {
+                        swal.fire(
+                            'هشدار!',
+                            data.message,
+                            'warning'
+                        );
+                    }//else
+                },//success
+                error: function (request, status, error)
+                {
+                    alert(request.responseText);
+                }//error
+            });//ajax
+        }
+        //---------------------------------------------------
+
+        function deletesubcategory()
+        {
+            var postData = {
+                            'Id':$('#subcategory :selected').val(),
+                            //'Name':$('#category-name').val(),
+                            'parentId':$('#category :selected').val(),
+                          };
+
+            $.ajax(
+            {
+                contentType: 'application/x-www-form-urlencoded',
+                dataType: 'json',
+                type: "POST",
+                url: "RemoveCategory",
+                data: postData,
+                success: function (data)
+                {
+                    if (data.isSuccess==true)
+                    {
+                        swal.fire(
+                        'موفق!',
+                        data.message,
+                        'success'
+                        ).then(function (isConfirm)
+                        {
+                            location.reload();
+                        });//then
+                    }//if
+                    else
+                    {
+                        swal.fire(
+                            'هشدار!',
+                            data.message,
+                            'warning'
+                        );
+                    }//else
+                },//success
+                error: function (request, status, error)
+                {
+                    alert(request.responseText);
+                }//error
+            });//ajax
+        }
+
+        //---------------------------------------------------
+        function beginop(event)
+        {
+            var target=$(event).attr('id');
+            $('#target-button').val(target);
+
+            switch(target)
+            {
+              case "add-new-category":
+                $('#categoryModal').modal('show');
+                break;
+
+              case "edit-category":
+                var categoryId = $("#category :selected").val();
+                var categoryName = $("#category :selected").text();
+                $('#modal-category-id').val(categoryId);
+                $('#modal-category-name').val(categoryName);
+                $('#categoryModal').modal('show');
+                break;
+
+             case "add-new-subcategory":
+                $('#categoryModal').modal('show');
+                break;
+
+             case "edit-subcategory":
+                var subCategoryId = $("#subcategory :selected").val();
+                var subCategoryName = $("#subcategory :selected").text();
+                //var parentId=$("#category :selected").val();
+
+                $('#modal-category-id').val(subCategoryId);
+                $('#modal-category-name').val(subCategoryName);
+                $('#categoryModal').modal('show');
+                break;
+            case "delete-category":
+                deletecategory();
+                break;
+        case "delete-subcategory":
+             deletesubcategory();
+                break;
+            }
+        }
+
+        function endoperation()
+        {
+             switch($('#target-button').val())
+            {
+              case "add-new-category":
+                AddNewCategory();
+                break;
+              case "edit-category":
+                EditCategory();
+                break;
+              case "add-new-subcategory":
+                AddNewSubCategory();
+                 break;
+              case "edit-subcategory":
+                EditSubCategory();
+                break;
+            }
+        }
+//--------------------------------------------------
+        $('#category').change(function()
+        {
+            var Id = $("#category :selected").val();
+                           
+            $.ajax(
+            {
+                contentType: 'application/x-www-form-urlencoded',
+                dataType: 'json',
+                type: "POST",
+                url: "ShowSubCategory/"+Id,
+                //data: Id,
+                success: function (indata)
+                {
+                    if (indata.isSuccess==true)
+                    {
+                        $('#subcategory').find('option').remove().end();
+                        for (var i = 0; i <= indata.data.length; i++)
+                        {
+                             $('#subcategory').append('<option value="' + indata.data[i].id + '">' + indata.data[i].name + '</option>');
+                        }
+                        alert("dsfsdfsdf");
+                    }//if
+                    else
+                    {
+                        $('#subcategory').find('option').remove().end();
+                        $('#subcategory').append('<option value="">--------------</option>');
+
+                        //swal.fire(
+                          //  'هشدار!',
+                            //indata.message,
+                            //'warning'
+                       // );
+                    }//else
+            },//success
+            error: function (request, status, error)
+            {
+                alert(request.responseText);
+            }//error
+        });//ajax
+     })//func
+      
+    </script>
+}
+
+
+@section Modals
+    {
+    <!-- Modal Edit User -->
+    <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">مدیریت دسته بندیها</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-xl-12 col-lg-12 col-md-12 mb-1">
+                        <fieldset class="form-group">
+                            <input type="hidden" id="target-button" />
+                            <input type="hidden" id="modal-category-id" />
+                            <input type="hidden" id="parent-id"/>
+                            <label for="basicInput">نام دسته بندی</label>
+                            <input type="text" class="form-control" id="modal-category-name">
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-secondary" data-dismiss="modal">بستن</a>
+                    <a class="btn btn-primary" onclick="endoperation()" id="saveButton">ذخیره دسته بندی</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    @*<div class="modal fade" id="EditCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">مدیریت دسته بندیها</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-xl-12 col-lg-12 col-md-12 mb-1">
+                        <fieldset class="form-group">
+                            <input type="hidden" id="edit-modal-category-id" />
+                            <label for="basicInput">نام دسته بندی</label>
+                            <input type="text" class="form-control" id="edit-modal-category-name">
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-secondary" data-dismiss="modal">بستن</a>
+                    <a class="btn btn-primary" onclick="EditCategory()" id="saveButton">ذخیره دسته بندی</a>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+
+}

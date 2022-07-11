@@ -1,0 +1,142 @@
+﻿@model Entities.Dtos.ProductDtos.ProductsForAdminDtoPaging
+@addTagHelper *, LazZiya.TagHelpers
+
+@{
+    ViewData["Title"] = "نمایش محصولات";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
+    bool result = false;
+    string message = "";
+    if (TempData["Result"] != null)
+    {
+        result = (bool)TempData["Result"];
+        message = result ? TempData["Message"].ToString() : "";
+    }
+}
+
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <!-- Zero configuration table -->
+        <section id="configuration">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+
+                        <div class="card-body collapse show">
+                            <div class="card-block card-dashboard">
+                                <div><a class="btn btn-outline-success" asp-action="NewProduct" asp-controller="Product" asp-area="Admin">افزودن محصول جدید</a></div>
+                                <p class="card-text">لیست محصولات</p>
+                                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                                <div class="col-sm-12">
+                                    <table class="table table-striped table-bordered zero-configuration dataTable" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="sorting_asc">نام</th>
+                                                <th class="sorting_asc">دسته بندی</th>
+                                                <th class="sorting_asc">برند </th>
+                                                <th class="sorting_asc">قیمت (ریال) </th>
+                                                <th class="sorting_asc">موجودی </th>
+                                                <th class="sorting_asc">عملیات </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.Products)
+                                            {
+                                                <tr role="row">
+                                                    <td>@item.Name</td>
+                                                    <td>@item.CategoryName</td>
+                                                    <td>@item.Brand</td>
+                                                    <td>@item.Price.Value.ToString("n0")</td>
+                                                    <td>@item.Inventory.Value.ToString("n0")</td>
+                                                    <td>
+                                                        <div class="btn btn-group btn-group-sm">
+                                                            <a onclick="deleteProduct(this)" id="@item.Id" class="btn btn-danger">حذف</a>
+                                                            <a asp-area="admin" asp-action="Edit" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-info">ویرایش</a>
+                                                            <a asp-area="admin" asp-action="Detail" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-outline-success">اطلاعات بیشتر</a>
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <paging total-records="Model.ProductsCount"
+                                            page-no="Model.Page"
+                                            page-size="Model.PageSize"
+                                            show-prev-next="true"
+                                            show-total-pages="false"
+                                            show-total-records="false"
+                                            show-page-size-nav="false"
+                                            show-first-numbered-page="true"
+                                            show-last-numbered-page="true"
+                                            query-string-key-page-no="Page"
+                                            query-string-key-page-size="PageSize"
+                                            gap-size="2">
+                                    </paging>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <link href="~/Sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <script src="~/Sweetalert2/sweetalert2.min.js"></script>
+
+    <script>
+        function deleteProduct(event)
+        {
+            var postData ={
+                            'Id':$(event).attr('id')//.val()
+                          };
+
+            $.ajax(
+            {
+                contentType: 'application/x-www-form-urlencoded',
+                dataType: 'json',
+                type: "POST",
+                url: "Product/Delete",
+                data: postData,
+                success: function (data)
+                {
+                    if (data.isSuccess==true)
+                    {
+                        swal.fire(
+                        'موفق!',
+                        data.message,
+                        'success'
+                        ).then(function (isConfirm)
+                        {
+                            location.reload();
+                        });//then
+                    }//if
+                    else
+                    {
+                        swal.fire(
+                            'هشدار!',
+                            data.message,
+                            'warning'
+                        );
+                    }//else
+                },//success
+                error: function (request, status, error)
+                {
+                    alert(request.responseText);
+                }//error
+            });//ajax
+        }
+    </script>
+
+}//section script
+
+
+

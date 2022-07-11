@@ -1,0 +1,154 @@
+﻿@model Site.Models.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "ورود به فروشگاه پولا شاپ";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت نام</title>
+    <!-- font---------------------------------------->
+    <link rel="stylesheet" href="~/SiteTemplate/assets/css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="~/SiteTemplate/assets/css/vendor/materialdesignicons.css">
+    <!-- plugin-------------------------------------->
+    <link rel="stylesheet" href="~/SiteTemplate/assets/css/vendor/bootstrap.css">
+    <link rel="stylesheet" href="~/SiteTemplate/assets/css/vendor/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/SiteTemplate/assets/css/vendor/noUISlider.min.css">
+    <!-- main-style---------------------------------->
+    <link rel="stylesheet" href="~/SiteTemplate/assets/css/main.css">
+</head>
+<body>
+
+    <!-- login----------------------------------->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg">
+                <section class="page-account-box">
+                    <div class="col-lg-6 col-md-6 col-xs-12 mx-auto">
+                        <div class="ds-userlogin">
+                            <a href="#" class="account-box-logo">digismart</a>
+                            <div class="account-box">
+                                <div class="account-box-headline">
+                                    <a href="#" class="login-ds active">
+                                        <span class="title">ورود</span>
+                                        <span class="sub-title">به فروشگاه پولا شاپ</span>
+                                    </a>
+                                    @*<a asp-action="Register" asp-controller="Account" asp-area="" class="register-ds">
+                                        <span class="title">ثبت نام</span>
+                                        <span class="sub-title">در فروشگاه پولا شاپ</span>
+                                    </a>*@
+                                </div>
+                                <div class="Login-to-account mt-4">
+                                    <div class="account-box-content">
+                                        @*<h4>ورود به حساب کاربری</h4>*@
+                                        <form asp-action="Login" asp-controller="Account" asp-area="" method="post" class="form-account text-right">
+                                            <div class="form-account-title">
+                                                <label asp-for="UserName"></label>
+                                                <input asp-for="UserName" class="number-email-input"  @*name="email-account"*@>
+                                                <span asp-validation-for="UserName" ></span>
+                                            </div>
+                                            <div class="form-account-title">
+                                                <label asp-for="Password">رمز عبور</label>
+                                                <input asp-for="Password" type="password" class="password-input" id="Password">
+                                                <span asp-validation-for="Password"></span>
+                                            </div>
+                                            <div class="form-auth-row">
+                                                <label for="#" class="ui-checkbox mt-1">
+                                                    <input asp-for="RememberMe" type="checkbox">
+                                                    <span class="ui-checkbox-check"></span>
+                                                </label>
+                                                <label asp-for="RememberMe" class="remember-me mr-0"></label>
+                                            </div>
+                                            <div class="form-row-account">
+                                                <input type="submit" @*onclick="Login()"*@  class="btn btn-outline-primary btn-login" value="ورود">
+                                                <a asp-action="" asp-controller="" asp-area="" class="account-link-password">رمز خود را فراموش کرده ام</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <!-- login----------------------------------->
+    <!-- scroll_Progress------------------------->
+    <div class="progress-wrap">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+        </svg>
+    </div>
+    <!-- scroll_Progress------------------------->
+
+</body>
+<!-- file js---------------------------------------------------->
+<script src="~/SiteTemplate/assets/js/vendor/jquery-3.2.1.min.js"></script>
+<script src="~/SiteTemplate/assets/js/vendor/bootstrap.js"></script>
+<!-- plugin----------------------------------------------------->
+<script src="~/SiteTemplate/assets/js/vendor/owl.carousel.min.js"></script>
+<script src="~/SiteTemplate/assets/js/vendor/jquery.countdown.js"></script>
+<script src="~/SiteTemplate/assets/js/vendor/ResizeSensor.min.js"></script>
+<script src="~/SiteTemplate/assets/js/vendor/theia-sticky-sidebar.min.js"></script>
+<script src="~/SiteTemplate/assets/js/vendor/wNumb.js"></script>
+<script src="~/SiteTemplate/assets/js/vendor/nouislider.min.js"></script>
+<!-- main js---------------------------------------------------->
+<script src="~/SiteTemplate/assets/js/main.js"></script>
+
+
+<link href="~/Sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+<script src="~/Sweetalert2/sweetalert2.min.js"></script>
+
+
+<script>
+    function Login() {
+        var UserName = $("#UserName").val();
+        var Password = $("#Password").val();
+        var RememberMe = $("#RememberMe").val();
+        var postData = {
+            'UserName': UserName,
+            'Password': Password,
+            'RememberMe':RememberMe,
+        };
+        $.ajax({
+            contentType: 'application/x-www-form-urlencoded',
+            dataType: 'json',
+            type: "POST",
+            url: "Login",
+            data: postData,
+            success: function (data) {
+                if (data.isSuccess == true) {
+                    swal.fire(
+                        'موفق!',
+                        data.message,
+                        'success'
+                    ).then(function (isConfirm) {
+                        window.location.replace("/");
+                    });
+                }
+                else {
+
+                    swal.fire(
+                        'هشدار!',
+                        data.message,
+                        'warning'
+                    );
+                }
+            },
+            error: function (request, status, error) {
+                swal.fire(
+                    'هشدار!',
+                    request.responseText,
+                    'warning'
+                );
+            }
+        });
+    }
+</script>
+</html>
+
